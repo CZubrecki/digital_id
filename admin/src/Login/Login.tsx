@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { TextField, Button } from "@material-ui/core";
+import {
+    useHistory
+} from "react-router-dom";
 import axios from 'axios';
 
 export default function Login() {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('')
+    let history = useHistory();
+    let { from } = { from: { pathname: "/" } };
 
     const login = async () => {
         axios({
@@ -22,14 +27,16 @@ export default function Login() {
             if (res.data.access_token) {
                 const token = res.data.access_token;
                 localStorage.setItem('access_token', token);
+                history.replace(from);
             }
-
-            //Redirect to form page
         }).catch((error) => { console.log(error) });
     }
-
     return (
-        <div>
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        }}>
             <form>
                 <div>
                     <TextField id="outlined-basic" placeholder="Email" type="email" variant="outlined" value={email} onChange={(event) => setEmail(event.target.value)} />

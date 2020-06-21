@@ -2,22 +2,20 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 export default function PrivateRoute({ children, ...rest }: any) {
-    const fakeAuth = {
-        isAuthenticated: false,
-        authenticate(cb: any) {
-            fakeAuth.isAuthenticated = true;
-            setTimeout(cb, 100); // fake async
-        },
-        signout(cb: any) {
-            fakeAuth.isAuthenticated = false;
-            setTimeout(cb, 100);
+    const isSignedIn = () => {
+        let signedIn = false;
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            signedIn = true;
         }
-    };
+        return signedIn;
+    }
+
     return (
         <Route
             {...rest}
             render={({ location }) =>
-                fakeAuth.isAuthenticated ? (
+                isSignedIn() ? (
                     children
                 ) : (
                         <Redirect
