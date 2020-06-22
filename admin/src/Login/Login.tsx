@@ -3,7 +3,7 @@ import { TextField, Button } from "@material-ui/core";
 import {
     useHistory
 } from "react-router-dom";
-import axios from 'axios';
+import { SignInUser } from '../Api/Login-API';
 
 export default function Login() {
     const [email, setEmail] = useState<string>('');
@@ -12,18 +12,7 @@ export default function Login() {
     let { from } = { from: { pathname: "/" } };
 
     const login = async () => {
-        axios({
-            method: 'post',
-            url: 'http://localhost:8080/auth/login',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            data: {
-                username: email,
-                password: password,
-            }
-        }).then((res) => {
+        await SignInUser(email, password).then((res) => {
             if (res.data.access_token) {
                 const token = res.data.access_token;
                 localStorage.setItem('access_token', token);

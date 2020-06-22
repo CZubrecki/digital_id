@@ -10,6 +10,7 @@ import {
 } from '@material-ui/pickers';
 import { PROVINCES } from '../Assets/Provinces';
 import { DigitalID } from '../Models/DigitalID';
+import { SubmitForm } from '../Api/Digital-Id-API';
 
 export default function DigitalIDSignUp() {
     const classes = useStyles();
@@ -36,7 +37,7 @@ export default function DigitalIDSignUp() {
         setProvince(event.target.value as string);
     };
 
-    const submitForm = () => {
+    const submitForm = async () => {
         const data: DigitalID = {
             customerNumber: customerNumber,
             givenName: givenName,
@@ -49,8 +50,9 @@ export default function DigitalIDSignUp() {
             province: province,
             dateOfBirth: dateOfBirth,
         }
-        console.log(data);
-        setSubmitted(true);
+        await SubmitForm(data).then((res) => {
+            setSubmitted(true);
+        }).catch((error) => console.log(error));
     }
 
     const newID = () => {
